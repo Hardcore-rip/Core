@@ -13,7 +13,7 @@ public class DiscordCommand extends BaseCommand {
     @Default
     public void onCommand(CommandSender sender) {
         sender.sendMessage(" ");
-        sender.sendMessage("&#6435b5&lDiscord &f» discord.gg/dupe" );
+        sender.sendMessage(TranslationKt.translate("&#6435b5&lDiscord &f» discord.gg/dupe") );
         sender.sendMessage(" ");
         if (sender instanceof Player) {
             Player p = (Player) sender;
