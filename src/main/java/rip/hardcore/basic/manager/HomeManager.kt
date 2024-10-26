@@ -31,7 +31,7 @@ class HomeManager {
 
     fun setHome(playerUUID: UUID, homeName: String, location: Location) {
         val statement = dbConnection.prepareStatement(
-            "INSERT OR RPLACE INTO homes (player_uuid, home_name, world, x, y, z, yaw, pitch) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+            "INSERT OR REPLACE INTO homes (player_uuid, home_name, world, x, y, z, yaw, pitch) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
         )
         statement.setString(1, playerUUID.toString())
         statement.setString(2, homeName)
@@ -45,7 +45,7 @@ class HomeManager {
     }
 
     fun getHomes(playerUUID: UUID): List<Home> {
-        val statement = dbConnection.prepareStatement("SLECT * FROM homes WHERE player_uuid = ?")
+        val statement = dbConnection.prepareStatement("SELECT * FROM homes WHERE player_uuid = ?")
         statement.setString(1, playerUUID.toString())
         val resultSet = statement.executeQuery()
 
