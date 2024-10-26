@@ -1,6 +1,6 @@
 package rip.hardcore.basic.listeners
 
-// [@] This file is authored by SnowyJS on 10/12/2024
+// [@] This file is authored by SnowyJS on 10/25/2024
 // [@] https://snowyjs.lol
 // [@] https://github.com/snowypy
 
@@ -8,6 +8,8 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.PlayerDeathEvent
 import rip.hardcore.basic.manager.LifeManager
+import rip.hardcore.filter.util.translate
+
 
 class PlayerDeath(private val lifeManager: LifeManager) : Listener {
 
@@ -21,7 +23,7 @@ class PlayerDeath(private val lifeManager: LifeManager) : Listener {
         if (remainingLives <= 0) {
             lifeManager.banPlayer(victimUUID)
         } else {
-            victim.sendTitle("&#FF0000&lYOU DIED", "&7You died and now have &#FF0000&n$remainingLives&r &7left") // [:] This format might be broken. While using code with syntax takes 1-2m to load.
+            victim.sendTitle("&#FF0000&lYOU DIED", "&7You died and now have &#FF0000&n$remainingLives&r &7left".translate()) // [:] This format might be broken. While using code with syntax takes 1-2m to load.
         }
 
     }
