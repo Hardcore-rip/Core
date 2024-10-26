@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.gradleup.shadow' version '8.3.0'
     id 'org.jetbrains.kotlin.jvm'
 }
 
@@ -33,6 +34,11 @@ dependencies {
     compileOnly 'me.clip:placeholderapi:2.11.5'
     implementation 'net.gmcbm.dependencies:acf-bukkit:0.5.2'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+}
+
+shadowJar {
+    relocate 'co.aikar.commands', 'rip.hardcore.basic.acf'
+    relocate 'co.aikar.locales', 'rip.hardcore.basic.locales'
 }
 
 def targetJavaVersion = 21
