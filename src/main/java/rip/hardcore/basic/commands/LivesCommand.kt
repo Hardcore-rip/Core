@@ -13,7 +13,6 @@ import rip.hardcore.basic.manager.LifeManager
 
 @CommandAlias("lives")
 class LivesCommand(private val lifeManager: LifeManager) : BaseCommand() {
-
     @Subcommand("stats")
     @CommandCompletion("@players")
     fun onStats(sender: Player, @Optional target: String?) {
