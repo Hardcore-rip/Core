@@ -11,9 +11,12 @@ import rip.hardcore.basic.commands.Warps.SetSpawnCommand;
 import rip.hardcore.basic.commands.Warps.SpawnCommand;
 import rip.hardcore.basic.commands.Warps.WarpManager;
 import rip.hardcore.basic.commands.Warps.WarpRequester;
+import rip.hardcore.basic.commands.homes.AdminHomeCommand;
+import rip.hardcore.basic.commands.homes.HomeCommand;
 import rip.hardcore.basic.listeners.General;
 import rip.hardcore.basic.listeners.OnFirstJoin;
 import rip.hardcore.basic.listeners.PlayerDeath;
+import rip.hardcore.basic.manager.HomeManager;
 import rip.hardcore.basic.manager.LifeManager;
 import rip.hardcore.basic.commands.LivesCommand;
 import org.bukkit.permissions.Permission;
@@ -29,6 +32,7 @@ public final class Basic extends JavaPlugin {
     Warps warps;
     WarpManager warpManager;
     WarpRequester warpRequester;
+    private HomeManager homeManager;
     LocationManager locationManager;
 
     @Override
@@ -46,6 +50,7 @@ public final class Basic extends JavaPlugin {
             }
         }
         lifeManager = new LifeManager(dbFile);
+        homeManager = new HomeManager();
         YAML();
         Commands();
 
@@ -65,6 +70,8 @@ public final class Basic extends JavaPlugin {
         commandManager.registerCommand(new StatsCommand(lifeManager));
         commandManager.registerCommand(new SpawnCommand(warpRequester,  locationManager));
         commandManager.registerCommand(new SetSpawnCommand(locationManager, warps));
+        commandManager.registerCommand(new HomeCommand(homeManager));
+        commandManager.registerCommand(new AdminHomeCommand(homeManager));
 
         Bukkit.getPluginManager().addPermission(new Permission("basic.auto", "Automaticaly teleport with warps", PermissionDefault.OP));
     }
