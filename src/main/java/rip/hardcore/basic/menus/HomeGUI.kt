@@ -31,7 +31,7 @@ class HomeGUI(private val homeManager: HomeManager, private val player: Player) 
         player.openInventory(inventory)
     }
 
-    private fun getMaxHomes(player: Player): Int {
+    fun getMaxHomes(player: Player): Int {
         return when {
             player.hasPermission("home.toprank") -> 5
             player.hasPermission("home.midrank") -> 4
