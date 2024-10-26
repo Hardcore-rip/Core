@@ -17,7 +17,6 @@ import rip.hardcore.basic.listeners.PlayerDeath;
 import rip.hardcore.basic.manager.LifeManager;
 import rip.hardcore.basic.commands.LivesCommand;
 import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 import rip.hardcore.basic.manager.LocationManager;
 import rip.hardcore.basic.storage.Warps;
 
@@ -79,7 +78,7 @@ public final class Basic extends JavaPlugin {
         } catch (Exception e) {
             e.printStackTrace();
             getLogger().severe("Failed to load warps file in start up");
-            getLogger().severe("Auto disabling Vandal... make a ticket in discord");
+            getLogger().severe("Auto disabling Basic... make a ticket in discord");
             Bukkit.getPluginManager().disablePlugin(this);
         }
         this.warps = new Warps(this);
