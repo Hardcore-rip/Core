@@ -21,7 +21,6 @@ public final class Basic extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
         File dbFile = new File(getDataFolder(), "player_lives.db");
         if (!dbFile.exists()) {
             getDataFolder().mkdirs();
@@ -39,10 +38,9 @@ public final class Basic extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new PlayerDeath(lifeManager), this);
         getServer().getPluginManager().registerEvents(new OnFirstJoin(lifeManager), this);
-
-        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")){
-
-        }
+        getServer().getPluginManager().registerEvents(new General(), this);
+        //        ("PlaceholderAPI")){
+        //}
 
     }
 
