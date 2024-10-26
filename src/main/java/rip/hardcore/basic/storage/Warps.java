@@ -21,9 +21,9 @@ public class Warps {
     }
 
     private void createConfig() {
-        configFile = new File(plugin.getDataFolder(), "storage/warps.yml");
+        configFile = new File(plugin.getDataFolder(), "warps.yml");
         if (!configFile.exists()) {
-            plugin.saveResource("storage/warps.yml", false);
+            plugin.saveResource("warps.yml", false);
         }
         config = YamlConfiguration.loadConfiguration(configFile);
     }
@@ -106,7 +106,7 @@ public class Warps {
 
     public void reloadConfig() {
         if (configFile == null) {
-            configFile = new File(plugin.getDataFolder(), "storage/warps.yml");
+            configFile = new File(plugin.getDataFolder(), "warps.yml");
         }
         config = YamlConfiguration.loadConfiguration(configFile);
     }
