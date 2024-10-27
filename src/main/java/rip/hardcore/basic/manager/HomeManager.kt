@@ -9,7 +9,7 @@ import rip.hardcore.basic.storage.Home
 
 class HomeManager {
 
-    private val dbConnection: Connection = DriverManager.getConnection("jdbc:sqlite:homes.db")
+    private val dbConnection: Connection = DriverManager.getConnection("jdbc:sqlite:Hardcore-Databases/homes.db")
 
     init {
         dbConnection.createStatement().executeUpdate(
