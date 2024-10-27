@@ -1,119 +1,100 @@
 package rip.hardcore.basic.storage;
 
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+import rip.hardcore.filter.util.TranslationKt;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Tags {
-
     private final Plugin plugin;
     private File configFile;
-    private FileConfiguration config;
+    private JsonObject config;
+    private final String filePath = "tags.json";
+    private final Gson gson;
 
     public Tags(Plugin plugin) {
         this.plugin = plugin;
+        this.gson = new GsonBuilder().setPrettyPrinting().create();
         createConfig();
     }
 
+
     private void createConfig() {
-        configFile = new File(plugin.getDataFolder(), "storage/tags.yml");
+        configFile = new File(plugin.getDataFolder(), filePath);
         if (!configFile.exists()) {
-            plugin.saveResource("storage/tags.yml", false);
+            plugin.saveResource(filePath, false);
         }
-        config = YamlConfiguration.loadConfiguration(configFile);
+        loadConfig();
     }
 
-    public double getDouble(String key) {
-        String value = config.getString(key);
-        if (value == null) {
-            return 0;
-        }
-        return Double.parseDouble(value);
-    }
+    public String getTag(String key) {
+        JsonElement element = config.get(key);
 
-    public String getValue(String key) {
-        String message = config.getString(key);
-        if (message == null) {
+        if (element == null) {
             return "";
         }
-        return message;
+        return TranslationKt.translate(element.getAsString());
     }
 
-    public void setValue(String key, String value) {
-        config.set(key, value);
+    public void setTag(String key, String value) {
+        config.addProperty(key, value);
         saveConfig();
     }
 
-    public void setInteger(String key, Integer value) {
-        config.set(key, value);
-        saveConfig();
-    }
-
-    public void setBoolean(String key, Boolean value) {
-        config.set(key, value);
-        saveConfig();
-    }
-
-    public void setDoubble(String key, Double value) {
-        config.set(key, value);
-        saveConfig();
-    }
-
-    public void setFloat(String key, Float value) {
-        config.set(key, value);
-        saveConfig();
-    }
-
-    public void deleteValue(String key) {
-        config.set(key, null);
-        saveConfig();
+    public void deleteTag(String key) {
+        if (config.has(key)) {
+            config.remove(key);
+            saveConfig();
+        }
     }
 
     public String listTags() {
-        List<String> tags = new ArrayList<>();
-        config.getKeys(false).forEach(tags::add);
-        return tags.toString();
-    }
-
-    public List<String> getTags() {
-        List<String> tags = new ArrayList<>();
-        config.getKeys(false).forEach(tags::add);
-        return tags;
-    }
-
-    public int getInteger(String key) {
-        try {
-            int message = Integer.parseInt(config.getString(key));
-            return message;
-        } catch (NumberFormatException e) {
-            return 0;
+        StringBuilder tagsList = new StringBuilder();
+        for (Map.Entry<String, JsonElement> entry : config.entrySet()) {
+            tagsList.append(entry.getKey()).append(",");
         }
+        return tagsList.toString();
     }
 
-    public boolean getBoolean(String key) {
-        try {
-            boolean message = Boolean.parseBoolean(config.getString(key));
-            return message;
-        } catch (NumberFormatException e) {
-            return false;
+    public List<String> tagList(){
+        List<String> list = new ArrayList<>();
+        for (Map.Entry<String, JsonElement> entry : config.entrySet()) {
+            list.add(entry.getKey());
         }
+        return list;
     }
 
     public void reloadConfig() {
         if (configFile == null) {
-            configFile = new File(plugin.getDataFolder(), "storage/tags.yml");
+            configFile = new File(plugin.getDataFolder(), filePath);
         }
-        config = YamlConfiguration.loadConfiguration(configFile);
+        loadConfig();
+    }
+
+    private void loadConfig() {
+        try (FileReader reader = new FileReader(configFile)) {
+            config = JsonParser.parseReader(reader).getAsJsonObject();
+        } catch (IOException e) {
+            e.printStackTrace();
+            config = new JsonObject();
+        }
     }
 
     public void saveConfig() {
-        try {
-            config.save(configFile);
+        try (FileWriter writer = new FileWriter(configFile)) {
+            gson.toJson(config, writer);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -68,6 +68,30 @@ class HomeManager {
         return homes
     }
 
+    fun getHome(playerUUID: UUID, homeName: String): Home? {
+        val statement = dbConnection.prepareStatement("SELECT * FROM homes WHERE player_uuid = ? AND home_name = ?")
+        statement.setString(1, playerUUID.toString())
+        statement.setString(2, homeName)
+        val resultSet = statement.executeQuery()
+
+        return if (resultSet.next()) {
+            Home(
+                playerUUID,
+                resultSet.getString("home_name"),
+                Location(
+                    Bukkit.getWorld(resultSet.getString("world")),
+                    resultSet.getDouble("x"),
+                    resultSet.getDouble("y"),
+                    resultSet.getDouble("z"),
+                    resultSet.getFloat("yaw"),
+                    resultSet.getFloat("pitch")
+                )
+            )
+        } else {
+            null
+        }
+    }
+
     fun deleteHome(playerUUID: UUID, homeName: String) {
         val statement = dbConnection.prepareStatement("DELETE FROM homes WHERE player_uuid = ? and home_name = ?")
         statement.setString(1, playerUUID.toString())

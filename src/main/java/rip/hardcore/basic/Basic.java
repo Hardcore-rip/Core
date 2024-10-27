@@ -17,6 +17,7 @@ import rip.hardcore.basic.commands.homes.HomeCommand;
 import rip.hardcore.basic.commands.tags.TagCommand;
 import rip.hardcore.basic.commands.tags.TagMenu;
 import rip.hardcore.basic.listeners.General;
+import rip.hardcore.basic.listeners.HomeListener;
 import rip.hardcore.basic.listeners.OnFirstJoin;
 import rip.hardcore.basic.listeners.PlayerDeath;
 import rip.hardcore.basic.manager.HomeManager;
@@ -99,6 +100,7 @@ public final class Basic extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerDeath(lifeManager), this);
         getServer().getPluginManager().registerEvents(new OnFirstJoin(lifeManager), this);
         getServer().getPluginManager().registerEvents(new General(), this);
+        getServer().getPluginManager().registerEvents(new HomeListener(homeManager), this);
         //        ("PlaceholderAPI")){
         //}
 
