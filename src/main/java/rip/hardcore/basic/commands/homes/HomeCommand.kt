@@ -22,11 +22,22 @@ class HomeCommand(private val homeManager: HomeManager) : BaseCommand() {
         val homes = homeManager.getHomes(player.uniqueId)
         val homeGUI = HomeGUI(homeManager, player)
 
-        if (homes.size >= homeGUI.getMaxHomes(player)) {
+        if (homeName.length > 8) {
+            player.sendMessage("&cHome name cannot be longer than 8 characters.".translate())
+        } else if (homes.size >= homeGUI.getMaxHomes(player)) {
             player.sendMessage("&cYou have reached your home limit.".translate())
+        } else if (homes.any { it.name == homeName.toLowerCase() }) {
+            player.sendMessage("&cYou already have a home with that name.".translate())
+
         } else {
-            homeManager.setHome(player.uniqueId, homeName, player.location)
+            homeManager.setHome(player.uniqueId, homeName.toLowerCase(), player.location)
             player.sendMessage("&aHome '$homeName' set!".translate())
         }
+    }
+
+    @CommandAlias("deletehome")
+    fun deleteHome(player: Player, homeName: String) {
+        homeManager.deleteHome(player.uniqueId, homeName.toLowerCase())
+        player.sendMessage("&aHome '$homeName' deleted!".translate())
     }
 }
