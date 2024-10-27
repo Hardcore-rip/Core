@@ -1,5 +1,6 @@
 package rip.hardcore.basic.listeners
 
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -23,12 +24,12 @@ class HomeListener(private val homeManager: HomeManager) : Listener {
 
         when (item.type) {
             Material.LIME_BED -> {
-                val homeName = item.itemMeta?.displayName?.removeHexCodes() ?: return
-                val home = homeManager.getHome(player.uniqueId, homeName)
+                val homeName = item.itemMeta?.displayName?.toLowerCase()?.removeHexCodes() ?: return
+                val home = homeManager.getHome(player.uniqueId, homeName.toLowerCase())
 
                 if (home != null) {
                     player.teleport(home.location)
-                    player.sendMessage("&aTeleported to home '$homeName'".translate())
+                    player.sendMessage("&aTeleported to home '${homeName.toUpperCase()}'".translate())
                 }
             }
             Material.GRAY_BED -> {
@@ -43,6 +44,6 @@ class HomeListener(private val homeManager: HomeManager) : Listener {
     }
 
     private fun String.removeHexCodes(): String {
-        return this.replace("&#[0-9a-fA-F]{6}".toRegex(), "")
+        return this.replace("§x(§[0-9a-fA-F]){6}|§[0-9a-fA-Fk-orK-OR]".toRegex(), "")
     }
 }
