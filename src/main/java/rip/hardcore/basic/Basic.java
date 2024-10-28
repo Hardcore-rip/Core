@@ -33,6 +33,7 @@ import rip.hardcore.basic.utils.AnvilGUI;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.stream.Collectors;
 
 public final class Basic extends JavaPlugin {
 
@@ -115,6 +116,12 @@ public final class Basic extends JavaPlugin {
         commandManager.registerCommand(new SpawnCommand(warpRequester,  locationManager, warps));
         commandManager.registerCommand(new SetSpawnCommand(locationManager, warps));
         commandManager.registerCommand(new HomeCommand(homeManager));
+        commandManager.getCommandCompletions().registerCompletion("homes",
+                (context) -> homeManager.getHomes(context.getPlayer().getUniqueId())
+                        .stream()
+                        .map(home -> home.getName())
+                        .collect(Collectors.toList())
+        );
         commandManager.registerCommand(new AdminHomeCommand(homeManager));
         commandManager.registerCommand(new TagCommand(tagManager, new TagMenu(tagManager, tags), tags));
 
