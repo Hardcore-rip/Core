@@ -20,12 +20,9 @@ import rip.hardcore.basic.listeners.General;
 import rip.hardcore.basic.listeners.HomeListener;
 import rip.hardcore.basic.listeners.OnFirstJoin;
 import rip.hardcore.basic.listeners.PlayerDeath;
-import rip.hardcore.basic.manager.HomeManager;
-import rip.hardcore.basic.manager.LifeManager;
+import rip.hardcore.basic.manager.*;
 import rip.hardcore.basic.commands.LivesCommand;
 import org.bukkit.permissions.Permission;
-import rip.hardcore.basic.manager.LocationManager;
-import rip.hardcore.basic.manager.TagManager;
 import rip.hardcore.basic.storage.Tags;
 import rip.hardcore.basic.storage.Warps;
 
@@ -44,6 +41,7 @@ public final class Basic extends JavaPlugin {
     LocationManager locationManager;
     TagManager tagManager;
     Tags tags;
+    TeleportManager teleportManager;
     public static SpiGUI spiGUI;
 
     @Override
@@ -94,6 +92,7 @@ public final class Basic extends JavaPlugin {
         spiGUI = new SpiGUI(this);
         lifeManager = new LifeManager(dbFile);
         homeManager = new HomeManager();
+        teleportManager = new TeleportManager();
         YAML();
         Commands();
 
@@ -115,7 +114,7 @@ public final class Basic extends JavaPlugin {
         commandManager.registerCommand(new StatsCommand(lifeManager));
         commandManager.registerCommand(new SpawnCommand(warpRequester,  locationManager, warps));
         commandManager.registerCommand(new SetSpawnCommand(locationManager, warps));
-        commandManager.registerCommand(new HomeCommand(homeManager, commandManager));
+        commandManager.registerCommand(new HomeCommand(homeManager, teleportManager, commandManager));
         commandManager.registerCommand(new AdminHomeCommand(homeManager));
         commandManager.registerCommand(new TagCommand(tagManager, new TagMenu(tagManager, tags), tags));
 
