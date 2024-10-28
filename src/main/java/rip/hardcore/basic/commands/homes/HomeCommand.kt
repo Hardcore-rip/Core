@@ -2,6 +2,7 @@ package rip.hardcore.basic.commands.homes
 
 import co.aikar.commands.BaseCommand
 import co.aikar.commands.annotation.CommandAlias
+import co.aikar.commands.annotation.CommandCompletion
 import co.aikar.commands.annotation.Default
 import org.bukkit.entity.Player
 import rip.hardcore.basic.manager.HomeManager
@@ -35,8 +36,16 @@ class HomeCommand(private val homeManager: HomeManager) : BaseCommand() {
         }
     }
 
+
+
     @CommandAlias("deletehome")
+    @CommandCompletion("@homes")
     fun deleteHome(player: Player, homeName: String) {
+        val homes = homeManager.getHomes(player.uniqueId)
+        if (homeManager.getHome(player.uniqueId, homeName.toLowerCase()) == null) {
+            player.sendMessage("&cYou do not have a home with that name.".translate())
+            return
+        }
         homeManager.deleteHome(player.uniqueId, homeName.toLowerCase())
         player.sendMessage("&aHome '$homeName' deleted!".translate())
     }
