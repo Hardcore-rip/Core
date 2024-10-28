@@ -28,7 +28,6 @@ import rip.hardcore.basic.manager.LocationManager;
 import rip.hardcore.basic.manager.TagManager;
 import rip.hardcore.basic.storage.Tags;
 import rip.hardcore.basic.storage.Warps;
-import rip.hardcore.basic.utils.AnvilGUI;
 
 import java.io.File;
 import java.io.IOException;
@@ -109,19 +108,14 @@ public final class Basic extends JavaPlugin {
 
     private void Commands(){
         PaperCommandManager commandManager = new PaperCommandManager(this);
+        commandManager.enableUnstableAPI("help");
         commandManager.registerCommand(new DiscordCommand());
         commandManager.registerCommand(new BroadcastCommand());
         commandManager.registerCommand(new LivesCommand(lifeManager));
         commandManager.registerCommand(new StatsCommand(lifeManager));
         commandManager.registerCommand(new SpawnCommand(warpRequester,  locationManager, warps));
         commandManager.registerCommand(new SetSpawnCommand(locationManager, warps));
-        commandManager.registerCommand(new HomeCommand(homeManager));
-        commandManager.getCommandCompletions().registerCompletion("homes",
-                (context) -> homeManager.getHomes(context.getPlayer().getUniqueId())
-                        .stream()
-                        .map(home -> home.getName())
-                        .collect(Collectors.toList())
-        );
+        commandManager.registerCommand(new HomeCommand(homeManager, commandManager));
         commandManager.registerCommand(new AdminHomeCommand(homeManager));
         commandManager.registerCommand(new TagCommand(tagManager, new TagMenu(tagManager, tags), tags));
 
