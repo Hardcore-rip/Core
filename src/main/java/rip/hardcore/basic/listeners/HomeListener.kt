@@ -6,11 +6,15 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.player.AsyncPlayerChatEvent
 import org.bukkit.plugin.java.JavaPlugin
 import rip.hardcore.basic.manager.HomeManager
 import rip.hardcore.filter.util.translate
+import java.util.*
 
 class HomeListener(private val homeManager: HomeManager) : Listener {
+
+    private val pendingHomeNames = mutableSetOf<UUID>()
 
     @EventHandler
     fun onInventoryClick(event: InventoryClickEvent) {
@@ -19,7 +23,6 @@ class HomeListener(private val homeManager: HomeManager) : Listener {
         if (event.view.title.toString() != "&7Your Homes".translate()) return
 
         event.isCancelled = true
-
         val item = event.currentItem ?: return
 
         when (item.type) {
@@ -33,13 +36,33 @@ class HomeListener(private val homeManager: HomeManager) : Listener {
                 }
             }
             Material.GRAY_BED -> {
-                player.sendMessage("&cYou can create a home in this slot by using /sethome".translate())
+                player.closeInventory()
+                player.sendMessage("&ePlease type a name for your new home in chat.".translate())
+                pendingHomeNames.add(player.uniqueId)
             }
             Material.BLACK_STAINED_GLASS_PANE -> {
             }
             else -> {
-
             }
+        }
+    }
+
+    @EventHandler
+    fun onPlayerChat(event: AsyncPlayerChatEvent) {
+        val player = event.player
+
+        if (pendingHomeNames.contains(player.uniqueId)) {
+            event.isCancelled = true
+
+            val homeName = event.message.removeHexCodes()
+            if (homeManager.getHome(player.uniqueId, homeName.toLowerCase()) == null) {
+                homeManager.setHome(player.uniqueId, homeName.toLowerCase(), player.location)
+                player.sendMessage("&aHome '$homeName' has been set at your current location.".translate())
+            } else {
+                player.sendMessage("&cA home with that name already exists. Please try again.".translate())
+            }
+
+            pendingHomeNames.remove(player.uniqueId)
         }
     }
 
