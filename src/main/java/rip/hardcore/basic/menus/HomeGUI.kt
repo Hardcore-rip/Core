@@ -24,7 +24,8 @@ class HomeGUI(private val homeManager: HomeManager, private val player: Player) 
                     itemMeta = createItemMeta(
                         "&#fa143e&l$name".translate(),
                         "&#f9628f".translate(),
-                        "&#f9628f[CLICK TO TELEPORT]".translate()
+                        "&#f9628f[LEFT CLICK TO TELEPORT]".translate(),
+                        "&#f9628f[RIGHT CLICK TO DELETE]".translate()
                     )
                 }
             } else {
