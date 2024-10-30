@@ -12,11 +12,12 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.java.JavaPlugin
 import rip.hardcore.basic.manager.HomeManager
+import rip.hardcore.basic.manager.TeleportManager
 import rip.hardcore.basic.menus.HomeGUI
 import rip.hardcore.filter.util.translate
 import java.util.*
 
-class HomeListener(private val homeManager: HomeManager) : Listener {
+class HomeListener(private val homeManager: HomeManager, private val teleportManager: TeleportManager) : Listener {
 
     private val pendingHomeNames = mutableSetOf<UUID>()
     private val pendingDeletions = mutableMapOf<UUID, String>()
@@ -39,8 +40,8 @@ class HomeListener(private val homeManager: HomeManager) : Listener {
                     if (event.click == ClickType.RIGHT) {
                         openDeleteConfirmation(player, homeName)
                     } else {
-                        player.teleport(home.location)
-                        player.sendMessage("&aTeleported to home '${homeName.toUpperCase()}'".translate())
+                        player.closeInventory()
+                        teleportManager.teleportPlayer(player, home.location, homeName)
                     }
                 }
             }
