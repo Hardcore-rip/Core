@@ -92,14 +92,14 @@ public final class Basic extends JavaPlugin {
         spiGUI = new SpiGUI(this);
         lifeManager = new LifeManager(dbFile);
         homeManager = new HomeManager();
-        teleportManager = new TeleportManager();
+        teleportManager = new TeleportManager(this);
         YAML();
         Commands();
 
         getServer().getPluginManager().registerEvents(new PlayerDeath(lifeManager), this);
         getServer().getPluginManager().registerEvents(new OnFirstJoin(lifeManager), this);
         getServer().getPluginManager().registerEvents(new General(), this);
-        getServer().getPluginManager().registerEvents(new HomeListener(homeManager), this);
+        getServer().getPluginManager().registerEvents(new HomeListener(homeManager, teleportManager), this);
         //        ("PlaceholderAPI")){
         //}
 
