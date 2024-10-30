@@ -5,12 +5,14 @@ import co.aikar.commands.PaperCommandManager
 import co.aikar.commands.annotation.*
 import org.bukkit.entity.Player
 import rip.hardcore.basic.manager.HomeManager
+import rip.hardcore.basic.manager.TeleportManager
 import rip.hardcore.basic.menus.HomeGUI
 import rip.hardcore.filter.util.translate
 
 @CommandAlias("home")
 class HomeCommand(
     private val homeManager: HomeManager,
+    private val teleportManager: TeleportManager,
     commandManager: PaperCommandManager
 ) : BaseCommand() {
 
@@ -57,8 +59,8 @@ class HomeCommand(
             player.sendMessage("&cYou do not have a home with that name.".translate())
             return
         }
-        player.teleport(home.location)
-        player.sendMessage("&aTeleported to home '$homeName'".translate())
+        player.closeInventory()
+        teleportManager.teleportPlayer(player, home.location, homeName)
     }
 
     @Subcommand("delete")
